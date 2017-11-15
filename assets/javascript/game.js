@@ -62,21 +62,20 @@ $(document).ready(function () {
             var $crystalButton = $("<button>");
             $crystalButton.addClass("btn btn-primary crystal")
                 .attr("value", crystal)
-                .html("<-*->");
+                .html("@ ! @");
             $crystalsDiv.append($crystalButton);
         });
     }
 
-    // This way I can just bind the on click once to the class crystal that each button will have, 
-    // I just have to make sure it runs after the buttons have been created
-    function addOnClick() {
-        $(".crystal").on("click", function () {
-            console.log("crystals class on click:", this.value);
-            userScore = parseInt(userScore) + parseInt(this.value);
-            $("#player-score").html(userScore).attr("value", userScore);
-            checkWin();
-        });
-    }
+    // Delegating the on click to the ancestor element that will be containing the 
+    // crystal clicks. This way the on click can be set up without the individual 
+    // crystals necessarily existing yet
+    $("#crystals").on("click", ".crystal", function () {
+        console.log("crystals class on click:", this.value);
+        userScore = parseInt(userScore) + parseInt(this.value);
+        $("#player-score").html(userScore).attr("value", userScore);
+        checkWin();
+    });
 
     // Compare the userScore to the computer generated randomNumber to see if the player has
     // won or lost
@@ -101,7 +100,6 @@ $(document).ready(function () {
         $("#player-score").html(userScore);
 
         intializeCrystals();
-        addOnClick();
     }
 
     // Start the first round
